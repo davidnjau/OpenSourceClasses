@@ -22,8 +22,24 @@ import java.util.Calendar
 
 class PatientInformation(private val context: Context) {
 
-    fun createEditTextWidgetFields(): List<LinearLayout> {
-        val widgetLayouts = mutableListOf<LinearLayout>()
+    // Method to create the full patient information section
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun createFullPatientInformationSection(rootLayout: LinearLayout) {
+        // Add EditText fields
+        val editTexts = createEditTextWidgetFields()
+        editTexts.forEach { rootLayout.addView(it) }
+
+        // Add Date of Birth section
+        val dobSection = createDobSection()
+        rootLayout.addView(dobSection)
+
+        // Add Spinner with EditText
+        val spinnerWithEditTextLayout = createIdentificationWidget()
+        rootLayout.addView(spinnerWithEditTextLayout)
+
+    }
+    fun createEditTextWidgetFields(): List<View> {
+        val widgetLayouts = mutableListOf<View>()
 
         DbEditTextNames.entries.forEach { widget ->
             val linearLayout = LinearLayout(context).apply {
@@ -46,8 +62,8 @@ class PatientInformation(private val context: Context) {
                 hint = Utils.getHint(widget).replace("C", "*") // Update hint
                 inputType = InputType.TYPE_CLASS_TEXT
                 background = ContextCompat.getDrawable(context, R.drawable.rounded_edittext) // Set rounded border
-
                 setPaddingRelative(32, 16, 16, 16) // Apply padding to the EditText (start padding is larger for hint)
+                tag = widget // Set tag to the corresponding enum
 
                 // Custom TextWatcher to manage hint padding
                 addTextChangedListener(object : TextWatcher {
@@ -78,7 +94,7 @@ class PatientInformation(private val context: Context) {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun createDobSection(): LinearLayout {
+    fun createDobSection(): View {
         val dobLayout = LinearLayout(context).apply {
             orientation = LinearLayout.VERTICAL
             layoutParams = LinearLayout.LayoutParams(
@@ -103,11 +119,13 @@ class PatientInformation(private val context: Context) {
         val accurateRadioButton = RadioButton(context).apply {
             text = "Accurate"
             id = View.generateViewId()
+            tag = "ACCURATE" // Set tag for radio button
         }
 
         val estimateRadioButton = RadioButton(context).apply {
             text = "Estimate"
             id = View.generateViewId()
+            tag = "ESTIMATE" // Set tag for radio button
         }
 
         radioGroup.addView(accurateRadioButton)
@@ -125,6 +143,7 @@ class PatientInformation(private val context: Context) {
             visibility = View.GONE
             background = ContextCompat.getDrawable(context, R.drawable.rounded_edittext) // Set rounded border
             setPaddingRelative(32, 16, 16, 16) // Padding inside the EditText
+            tag = DbDOB.YEARS_C // Set tag to the corresponding enum
 
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -140,6 +159,7 @@ class PatientInformation(private val context: Context) {
             visibility = View.GONE
             background = ContextCompat.getDrawable(context, R.drawable.rounded_edittext) // Set rounded border
             setPaddingRelative(32, 16, 16, 16) // Padding inside the EditText
+            tag = DbDOB.MONTHS // Set tag to the corresponding enum
 
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -155,6 +175,7 @@ class PatientInformation(private val context: Context) {
             visibility = View.GONE
             background = ContextCompat.getDrawable(context, R.drawable.rounded_edittext) // Set rounded border
             setPaddingRelative(32, 16, 16, 16) // Padding inside the EditText
+            tag = DbDOB.DAYS // Set tag to the corresponding enum
 
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -208,70 +229,44 @@ class PatientInformation(private val context: Context) {
         return dobLayout
     }
 
-    fun createSpinnerWithEditText(): LinearLayout {
-        val spinnerLayout = LinearLayout(context).apply {
+    fun createIdentificationWidget(): View {
+        val identificationLayout = LinearLayout(context).apply {
             orientation = LinearLayout.VERTICAL
-            setPadding(16, 24, 16, 24) // Add more padding between widgets
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                setMargins(16, 24, 16, 24) // Add more padding between widgets
+            }
         }
 
-        val spinnerLabel = TextView(context).apply {
-            text = "Identification Type" // Generic label for Spinner
+        val identificationLabel = TextView(context).apply {
+            text = "Identification Type"
             textSize = 16f
             setPadding(0, 0, 0, 8) // Padding below the label
         }
 
-        val spinner = Spinner(context).apply {
-            val adapter = ArrayAdapter(
+        val identificationSpinner = Spinner(context).apply {
+            adapter = ArrayAdapter(
                 context,
-                android.R.layout.simple_spinner_item, // Use Android's built-in layout
-                IdentificationTypes.entries.map { Utils.getSpinnerLabel(it) }
-            )
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) // Use Android's built-in layout
-            this.adapter = adapter
-
-            layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            ).apply {
-                setMargins(0, 0, 0, 16) // Margin below the spinner dropdown
+                android.R.layout.simple_spinner_item,
+                IdentificationTypes.values().map { Utils.getSpinnerLabel(it) }
+            ).also { adapter ->
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             }
+            background = ContextCompat.getDrawable(context, R.drawable.rounded_edittext)
+            setPadding(16, 16, 16, 16) // Padding inside the spinner
+            tag = IdentificationTypes.PASSPORT // Set the tag to the enum
+
+            // Add validation if required
         }
 
-        val spinnerErrorTextView = TextView(context).apply {
-            text = Utils.getSpinnerErrorMessage(IdentificationTypes.NATIONAL_ID) // Default message for Spinner
-            setTextColor(Color.RED)
-            visibility = View.GONE
-            setPadding(0, 8, 0, 16) // Padding above and below the error message
-        }
+        identificationLayout.addView(identificationLabel)
+        identificationLayout.addView(identificationSpinner)
 
-        val editTextLabel = TextView(context).apply {
-            text = "Enter Identification Number" // Label for EditText
-            textSize = 16f
-            setPadding(0, 0, 0, 8) // Padding below the label
-        }
-
-        val editText = EditText(context).apply {
-            hint = "Enter Identification number"
-            inputType = InputType.TYPE_CLASS_NUMBER
-            background = ContextCompat.getDrawable(context, R.drawable.rounded_edittext) // Set rounded border
-            setPaddingRelative(32, 16, 16, 16) // Apply padding to the EditText (start padding is larger for hint)
-
-            layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            ).apply {
-                setMargins(0, 8, 0, 0) // Margin below the "Enter Number" EditText
-            }
-        }
-
-        spinnerLayout.addView(spinnerLabel)
-        spinnerLayout.addView(spinner)
-        spinnerLayout.addView(spinnerErrorTextView)
-        spinnerLayout.addView(editTextLabel)
-        spinnerLayout.addView(editText)
-
-        return spinnerLayout
+        return identificationLayout
     }
+
 }
 
 

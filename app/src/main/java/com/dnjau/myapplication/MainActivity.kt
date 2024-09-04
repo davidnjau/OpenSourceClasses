@@ -2,14 +2,19 @@ package com.dnjau.myapplication
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
+import android.widget.Button
 import android.widget.LinearLayout
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import java.util.Arrays
 
 class MainActivity : AppCompatActivity() {
+
+    private val linearLayoutList = ArrayList<LinearLayout>()
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,20 +24,21 @@ class MainActivity : AppCompatActivity() {
         // Create an instance of PatientInformation
         val patientInformation = PatientInformation(this)
 
-        // Create and add EditText fields
-        val editTexts = patientInformation.createEditTextWidgetFields()
-        val editTextLayout = findViewById<LinearLayout>(R.id.editTextLayout) // Your layout container for EditTexts
-        editTexts.forEach { editTextLayout.addView(it) }
+        // Get the root layout from XML
+        val rootLayout = findViewById<LinearLayout>(R.id.rootLayout)
 
-        // Create and add Date of Birth section
-        val dobSection = patientInformation.createDobSection()
-        val dobLayout = findViewById<LinearLayout>(R.id.dobLayout) // Your layout container for DOB section
-        dobLayout.addView(dobSection)
+// Create and add all widgets to the root layout
+        patientInformation.createFullPatientInformationSection(rootLayout)
 
-        // Create and add Spinner with EditText
-        val spinnerWithEditTextLayout = patientInformation.createSpinnerWithEditText()
-        val spinnerLayout = findViewById<LinearLayout>(R.id.spinnerLayout) // Your layout container for Spinner and EditText
-        spinnerLayout.addView(spinnerWithEditTextLayout)
+        findViewById<Button>(R.id.btnSave).setOnClickListener {
+
+            val formData = FormUtils.extractFormData(rootLayout)
+            Log.e("----->","<------")
+            println(formData)
+            Log.e("----->","<------")
+
+        }
+
 
     }
 }
