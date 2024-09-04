@@ -43,7 +43,8 @@ object FormUtils {
                             is TextView -> {
                                 // Assuming the TextView is used to display selected date
                                 if (innerView.text.startsWith("Selected Date: ")) {
-                                    selectedDate = innerView.text.toString().removePrefix("Selected Date: ")
+                                    selectedDate = innerView.text.toString()
+                                        .removePrefix("Selected Date: ")
                                 }
                             }
                             is Spinner -> {

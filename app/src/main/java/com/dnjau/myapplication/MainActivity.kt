@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
 // Create and add all widgets to the root layout
         patientInformation.createFullPatientInformationSection(rootLayout)
 
-        findViewById<Button>(R.id.btnSave).setOnClickListener {
+        findViewById<Button>(R.id.saveButton).setOnClickListener {
 
             val formData = FormUtils.extractFormData(rootLayout)
             Log.e("----->","<------")

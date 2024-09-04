@@ -257,12 +257,39 @@ class PatientInformation(private val context: Context) {
             background = ContextCompat.getDrawable(context, R.drawable.rounded_edittext)
             setPadding(16, 16, 16, 16) // Padding inside the spinner
             tag = IdentificationTypes.PASSPORT // Set the tag to the enum
-
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                setMargins(5, 8, 5, 24) // Add more padding between widgets
+            }
             // Add validation if required
+        }
+
+        val editTextLabel = TextView(context).apply {
+            text = "Enter Identification Number" // Label for EditText
+            textSize = 16f
+            setPadding(0, 0, 0, 8) // Padding below the label
+        }
+
+        val editText = EditText(context).apply {
+            hint = "Enter number"
+            inputType = InputType.TYPE_CLASS_NUMBER
+            background = ContextCompat.getDrawable(context, R.drawable.rounded_edittext) // Set rounded border
+            setPaddingRelative(32, 16, 16, 16) // Apply padding to the EditText (start padding is larger for hint)
+
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                setMargins(0, 10, 0, 8) // Margin below the "Enter Number" EditText
+            }
         }
 
         identificationLayout.addView(identificationLabel)
         identificationLayout.addView(identificationSpinner)
+        identificationLayout.addView(editTextLabel)
+        identificationLayout.addView(editText)
 
         return identificationLayout
     }
