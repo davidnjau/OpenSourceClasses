@@ -215,7 +215,7 @@ class PatientInformation(private val context: Context) {
         }
 
         val spinnerLabel = TextView(context).apply {
-            text = "Select an Option" // Generic label for Spinner
+            text = "Identification Type" // Generic label for Spinner
             textSize = 16f
             setPadding(0, 0, 0, 8) // Padding below the label
         }
@@ -238,20 +238,20 @@ class PatientInformation(private val context: Context) {
         }
 
         val spinnerErrorTextView = TextView(context).apply {
-            text = Utils.getSpinnerErrorMessage(IdentificationTypes.OPTION_ONE) // Default message for Spinner
+            text = Utils.getSpinnerErrorMessage(IdentificationTypes.NATIONAL_ID) // Default message for Spinner
             setTextColor(Color.RED)
             visibility = View.GONE
             setPadding(0, 8, 0, 16) // Padding above and below the error message
         }
 
         val editTextLabel = TextView(context).apply {
-            text = "Enter Number" // Label for EditText
+            text = "Enter Identification Number" // Label for EditText
             textSize = 16f
             setPadding(0, 0, 0, 8) // Padding below the label
         }
 
         val editText = EditText(context).apply {
-            hint = "Enter number"
+            hint = "Enter Identification number"
             inputType = InputType.TYPE_CLASS_NUMBER
             background = ContextCompat.getDrawable(context, R.drawable.rounded_edittext) // Set rounded border
             setPaddingRelative(32, 16, 16, 16) // Apply padding to the EditText (start padding is larger for hint)

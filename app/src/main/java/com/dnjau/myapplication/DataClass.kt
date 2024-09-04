@@ -7,5 +7,20 @@ enum class DbDOB {
     YEARS_C, MONTHS, DAYS
 }
 enum class IdentificationTypes {
-    OPTION_ONE, OPTION_TWO, OPTION_THREE
+    PASSPORT, NEMIS, NATIONAL_ID
 }
+
+data class FormData(
+    val firstName: String?,
+    val lastName: String?,
+    val middleName: String?,
+    val otherNames: String?,
+    val telephone: String?,
+    val years: Int?,
+    val months: Int?,
+    val days: Int?,
+    val selectedDate: String?,
+    val identificationType: IdentificationTypes?,
+    val number: Int?
+)
+

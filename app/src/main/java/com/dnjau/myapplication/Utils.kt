@@ -30,7 +30,7 @@ object Utils {
     }
 
     fun getErrorMessage(key: Any): String {
-        return errorMessages[key] ?: "This field is required"
+        return errorMessages[key]?.replace("C","*") ?: "This field is required"
     }
     fun getSpinnerLabel(key: IdentificationTypes): String {
         return formatEnumName(key.name)
