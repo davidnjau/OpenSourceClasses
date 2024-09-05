@@ -6,8 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import com.dnjau.myapplication.R
 
 // Concrete implementation for label customization (OCP)
@@ -20,10 +22,11 @@ class DefaultLabelCustomizer : LabelCustomizer {
                 ViewGroup.LayoutParams.WRAP_CONTENT
             )
         ) .apply {
-            setMargins(8,8,8,8)
+            setMargins(8,8,8,0)
         }
 
         textView.layoutParams = layoutParams
+        textView.textSize = 18f
 
         // Set text color and padding
         textView.setTextColor(Color.BLACK)
@@ -36,13 +39,23 @@ class EditTextFieldCreator(
     private val context: Context
 ) : FieldCreator {
 
-    override fun createField(label: String, isMandatory: Boolean, inputType: Int): View {
+    override fun createField(
+        label: String,
+        isMandatory: Boolean,
+        inputType: Int
+    ): View {
         val editText = EditText(context).apply {
             this.hint = label
             this.inputType = inputType
-            if (isMandatory) {
-                setHintTextColor(Color.RED) // Visual indicator for mandatory
+            this.background = ContextCompat.getDrawable(context, R.drawable.rounded_edittext) // Set rounded border
+
+            this.layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                setMargins(8,5,8,12)
             }
+            this.setPadding(32,16,20,16)
         }
         return editText
     }
