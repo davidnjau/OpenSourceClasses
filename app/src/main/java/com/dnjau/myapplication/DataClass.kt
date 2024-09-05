@@ -1,10 +1,22 @@
 package com.dnjau.myapplication
 
-data class NextOfKinField(
+data class DbField(
+    val widgets: String,
     val label: String,
-    val inputType: Int // InputType for EditText (e.g., InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS)
+    val isMandatory: Boolean = false,
+
+    val inputType: Int? = null, // InputType for EditText (e.g., InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS)
+    val optionList : List<String> = emptyList()
 )
 
+data class DbFormData(
+    val tag: String,
+    val text: String,
+)
+
+enum class DbWidgets{
+    EDIT_TEXT, SPINNER
+}
 
 
 

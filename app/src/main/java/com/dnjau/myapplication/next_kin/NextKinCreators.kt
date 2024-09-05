@@ -14,7 +14,9 @@ import com.dnjau.myapplication.R
 
 // Concrete implementation for label customization (OCP)
 class DefaultLabelCustomizer : LabelCustomizer {
-    override fun applyCustomization(textView: TextView) {
+    override fun applyCustomization(
+        textView: TextView
+    ) {
         // Ensure that the TextView has layoutParams
         val layoutParams = textView.layoutParams ?: ViewGroup.MarginLayoutParams(
             ViewGroup.LayoutParams(
@@ -38,7 +40,6 @@ class DefaultLabelCustomizer : LabelCustomizer {
 class EditTextFieldCreator(
     private val context: Context
 ) : FieldCreator {
-
     override fun createField(
         label: String,
         isMandatory: Boolean,
@@ -48,6 +49,7 @@ class EditTextFieldCreator(
             this.hint = label
             this.inputType = inputType
             this.background = ContextCompat.getDrawable(context, R.drawable.rounded_edittext) // Set rounded border
+            this.tag = label
 
             this.layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -64,10 +66,14 @@ class EditTextFieldCreator(
 // Concrete implementation for creating a Spinner field (LSP)
 class SpinnerFieldCreator(
     private val options: List<String>,
+    private val label: String,
     private val context: Context) : FieldCreator {
-
-    override fun createField(label: String, isMandatory: Boolean, inputType: Int): View {
+    override fun createField(
+        label: String,
+        isMandatory: Boolean,
+        inputType: Int): View {
         val spinner = Spinner(context)
+        spinner.tag = label
         val adapter = ArrayAdapter(context, R.layout.simple_spinner_item, options)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = adapter

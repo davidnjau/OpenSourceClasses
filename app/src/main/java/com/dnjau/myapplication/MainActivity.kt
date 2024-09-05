@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var fieldManager: FieldManager
     private lateinit var relationshipOptions: List<String> // Passed by the user
-    private lateinit var nonMandatoryFields: List<NextOfKinField> // Passed by the user
+    private lateinit var nonMandatoryFields: List<DbField> // Passed by the user
     private lateinit var rootLayout:LinearLayout
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -32,59 +32,31 @@ class MainActivity : AppCompatActivity() {
         // Initialize FieldManager with dependencies (inject via constructor or manually)
         fieldManager = FieldManager(DefaultLabelCustomizer(), this)
 
-        // Example data
+        /**
+         * 1. Edit Texts
+         * - Provide the label and the input type
+         * -
+         */
+
+
+        val dbField1 = DbField(DbWidgets.EDIT_TEXT.name,"Full Name", true, InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS)
+        val dbField2 = DbField(DbWidgets.EDIT_TEXT.name,"Email Address", false, InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS)
+        val dbField3 = DbField(DbWidgets.EDIT_TEXT.name,"Phone Number", false, InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS)
+
         relationshipOptions = listOf("Father", "Mother", "Sibling", "Spouse", "Friend")
-        nonMandatoryFields = listOf(
-            NextOfKinField("Phone Number", InputType.TYPE_CLASS_PHONE),
-            NextOfKinField("Email", InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS)
-        )
 
-        // Add mandatory Full Name
-        fieldManager.addTextView(
-            "Full Name",
-            rootLayout
-        )
-        fieldManager.addField(
-            EditTextFieldCreator(this),
-            "Enter Full Name",
-            true,
-            rootLayout
-        )
+        val dbField4 = DbField(DbWidgets.SPINNER.name,"Relationships", true, null, relationshipOptions)
 
-        // Add mandatory Relationship Spinner
-        fieldManager.addTextView(
-            "Relationship",
-            rootLayout
-        )
-        fieldManager.addField(
-            SpinnerFieldCreator(relationshipOptions , this),
-            "Select Relationship",
-            true,
-            rootLayout
-        )
-
-        // Add non-mandatory fields dynamically
-        for (field in nonMandatoryFields) {
-            fieldManager.addTextView(
-                field.label,
-                rootLayout
-            )
-            fieldManager.addField(
-                EditTextFieldCreator(this),
-                field.label,
-                false,
-                rootLayout
-            )
-
-        }
+        val dbFieldList = listOf(dbField1, dbField2, dbField3, dbField4)
+        fieldManager.populateView(ArrayList(dbFieldList), rootLayout)
 
 
         findViewById<Button>(R.id.saveButton).setOnClickListener {
 
-//            val formData = FormUtils.extractFormData(rootLayout)
-//            Log.e("----->","<------")
-//            println(formData)
-//            Log.e("----->","<------")
+            val formData = FormUtils.extractFormData(rootLayout)
+            Log.e("----->","<------")
+            println(formData)
+            Log.e("----->","<------")
 
         }
 
