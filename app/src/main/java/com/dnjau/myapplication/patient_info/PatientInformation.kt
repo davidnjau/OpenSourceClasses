@@ -1,15 +1,13 @@
-package com.dnjau.myapplication
+package com.dnjau.myapplication.patient_info
 
 import android.app.DatePickerDialog
 import android.content.Context
-import android.graphics.Color
 import android.os.Build
 import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
 import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.DatePicker
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.RadioButton
@@ -18,6 +16,10 @@ import android.widget.Spinner
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import com.dnjau.myapplication.DbDOB
+import com.dnjau.myapplication.DbEditTextNames
+import com.dnjau.myapplication.IdentificationTypes
+import com.dnjau.myapplication.R
 import java.util.Calendar
 
 class PatientInformation(private val context: Context) {
@@ -75,7 +77,8 @@ class PatientInformation(private val context: Context) {
                         }
 
                         if (widget.name.endsWith("_C") && s.isNullOrEmpty()) { // Check if the field is compulsory
-                            error = Utils.getErrorMessage(widget) // Set dynamic error message for compulsory fields
+                            error =
+                                Utils.getErrorMessage(widget) // Set dynamic error message for compulsory fields
                         }
                     }
 

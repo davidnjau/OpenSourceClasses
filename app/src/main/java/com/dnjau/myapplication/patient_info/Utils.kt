@@ -1,4 +1,8 @@
-package com.dnjau.myapplication
+package com.dnjau.myapplication.patient_info
+
+import com.dnjau.myapplication.DbDOB
+import com.dnjau.myapplication.DbEditTextNames
+import com.dnjau.myapplication.IdentificationTypes
 
 object Utils {
 

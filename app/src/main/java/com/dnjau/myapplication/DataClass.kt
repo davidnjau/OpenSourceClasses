@@ -1,5 +1,14 @@
 package com.dnjau.myapplication
 
+data class NextOfKinField(
+    val label: String,
+    val inputType: Int // InputType for EditText (e.g., InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS)
+)
+
+
+
+
+
 enum class DbEditTextNames {
     FIRST_NAME_C, LAST_NAME_C, MIDDLE_NAME, OTHER_NAMES, TELEPHONE_C
 }

@@ -1,13 +1,17 @@
-package com.dnjau.myapplication
+package com.dnjau.myapplication.patient_info
 
-import android.util.Log
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
+import com.dnjau.myapplication.DbDOB
+import com.dnjau.myapplication.DbEditTextNames
+import com.dnjau.myapplication.FormData
+import com.dnjau.myapplication.IdentificationTypes
 
 object FormUtils {
     fun extractFormData(rootLayout: LinearLayout): FormData {
+
         var firstName: String? = null
         var lastName: String? = null
         var middleName: String? = null
