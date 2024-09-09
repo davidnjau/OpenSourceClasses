@@ -1,4 +1,4 @@
-package com.dnjau.myapplication.next_kin
+package com.dnjau.myapplication.shared_components
 
 import android.content.Context
 import android.graphics.Color
@@ -11,6 +11,10 @@ import android.widget.Spinner
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.dnjau.myapplication.R
+
+/**
+ * This contains all the dynamic Widgets
+ */
 
 // Concrete implementation for label customization (OCP)
 class DefaultLabelCustomizer : LabelCustomizer {
@@ -66,7 +70,6 @@ class EditTextFieldCreator(
 // Concrete implementation for creating a Spinner field (LSP)
 class SpinnerFieldCreator(
     private val options: List<String>,
-    private val label: String,
     private val context: Context) : FieldCreator {
     override fun createField(
         label: String,

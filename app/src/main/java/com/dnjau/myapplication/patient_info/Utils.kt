@@ -1,8 +1,8 @@
 package com.dnjau.myapplication.patient_info
 
-import com.dnjau.myapplication.DbDOB
-import com.dnjau.myapplication.DbEditTextNames
-import com.dnjau.myapplication.IdentificationTypes
+import com.dnjau.myapplication.shared_components.DbDOB
+import com.dnjau.myapplication.shared_components.DbEditTextNames
+import com.dnjau.myapplication.shared_components.IdentificationTypes
 
 object Utils {
 

@@ -16,86 +16,15 @@ import android.widget.Spinner
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
-import com.dnjau.myapplication.DbDOB
-import com.dnjau.myapplication.DbEditTextNames
-import com.dnjau.myapplication.IdentificationTypes
+import com.dnjau.myapplication.shared_components.DbDOB
+import com.dnjau.myapplication.shared_components.DbEditTextNames
+import com.dnjau.myapplication.shared_components.IdentificationTypes
 import com.dnjau.myapplication.R
 import java.util.Calendar
 
 class PatientInformation(private val context: Context) {
 
     // Method to create the full patient information section
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun createFullPatientInformationSection(rootLayout: LinearLayout) {
-        // Add EditText fields
-        val editTexts = createEditTextWidgetFields()
-        editTexts.forEach { rootLayout.addView(it) }
-
-        // Add Date of Birth section
-        val dobSection = createDobSection()
-        rootLayout.addView(dobSection)
-
-        // Add Spinner with EditText
-        val spinnerWithEditTextLayout = createIdentificationWidget()
-        rootLayout.addView(spinnerWithEditTextLayout)
-
-    }
-    fun createEditTextWidgetFields(): List<View> {
-        val widgetLayouts = mutableListOf<View>()
-
-        DbEditTextNames.entries.forEach { widget ->
-            val linearLayout = LinearLayout(context).apply {
-                orientation = LinearLayout.VERTICAL
-                layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-                ).apply {
-                    setMargins(16, 24, 16, 24) // Add more padding between widgets
-                }
-            }
-
-            val label = TextView(context).apply {
-                text = Utils.getHint(widget).replace("Enter ", "").replace("C", "*") // Update label
-                textSize = 16f
-                setPadding(0, 0, 0, 8) // Padding below label
-            }
-
-            val editText = EditText(context).apply {
-                hint = Utils.getHint(widget).replace("C", "*") // Update hint
-                inputType = InputType.TYPE_CLASS_TEXT
-                background = ContextCompat.getDrawable(context, R.drawable.rounded_edittext) // Set rounded border
-                setPaddingRelative(32, 16, 16, 16) // Apply padding to the EditText (start padding is larger for hint)
-                tag = widget // Set tag to the corresponding enum
-
-                // Custom TextWatcher to manage hint padding
-                addTextChangedListener(object : TextWatcher {
-                    override fun afterTextChanged(s: Editable?) {
-                        if (s.isNullOrEmpty()) {
-                            setPaddingRelative(32, 16, 16, 16) // Apply padding to hint
-                        } else {
-                            setPaddingRelative(16, 16, 16, 16) // Apply padding to text
-                        }
-
-                        if (widget.name.endsWith("_C") && s.isNullOrEmpty()) { // Check if the field is compulsory
-                            error =
-                                Utils.getErrorMessage(widget) // Set dynamic error message for compulsory fields
-                        }
-                    }
-
-                    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-                    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-                })
-            }
-
-            linearLayout.addView(label)
-            linearLayout.addView(editText)
-
-            widgetLayouts.add(linearLayout)
-        }
-
-        return widgetLayouts
-    }
-
     @RequiresApi(Build.VERSION_CODES.O)
     fun createDobSection(): View {
         val dobLayout = LinearLayout(context).apply {
@@ -230,71 +159,6 @@ class PatientInformation(private val context: Context) {
         dobLayout.addView(dateEditText)
 
         return dobLayout
-    }
-
-    fun createIdentificationWidget(): View {
-        val identificationLayout = LinearLayout(context).apply {
-            orientation = LinearLayout.VERTICAL
-            layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            ).apply {
-                setMargins(16, 24, 16, 24) // Add more padding between widgets
-            }
-        }
-
-        val identificationLabel = TextView(context).apply {
-            text = "Identification Type"
-            textSize = 16f
-            setPadding(0, 0, 0, 8) // Padding below the label
-        }
-
-        val identificationSpinner = Spinner(context).apply {
-            adapter = ArrayAdapter(
-                context,
-                android.R.layout.simple_spinner_item,
-                IdentificationTypes.values().map { Utils.getSpinnerLabel(it) }
-            ).also { adapter ->
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            }
-            background = ContextCompat.getDrawable(context, R.drawable.rounded_edittext)
-            setPadding(16, 16, 16, 16) // Padding inside the spinner
-            tag = IdentificationTypes.PASSPORT // Set the tag to the enum
-            layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            ).apply {
-                setMargins(5, 8, 5, 24) // Add more padding between widgets
-            }
-            // Add validation if required
-        }
-
-        val editTextLabel = TextView(context).apply {
-            text = "Enter Identification Number" // Label for EditText
-            textSize = 16f
-            setPadding(0, 0, 0, 8) // Padding below the label
-        }
-
-        val editText = EditText(context).apply {
-            hint = "Enter number"
-            inputType = InputType.TYPE_CLASS_NUMBER
-            background = ContextCompat.getDrawable(context, R.drawable.rounded_edittext) // Set rounded border
-            setPaddingRelative(32, 16, 16, 16) // Apply padding to the EditText (start padding is larger for hint)
-
-            layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            ).apply {
-                setMargins(0, 10, 0, 8) // Margin below the "Enter Number" EditText
-            }
-        }
-
-        identificationLayout.addView(identificationLabel)
-        identificationLayout.addView(identificationSpinner)
-        identificationLayout.addView(editTextLabel)
-        identificationLayout.addView(editText)
-
-        return identificationLayout
     }
 
 }

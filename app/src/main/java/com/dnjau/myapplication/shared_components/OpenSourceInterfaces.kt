@@ -1,4 +1,4 @@
-package com.dnjau.myapplication.next_kin
+package com.dnjau.myapplication.shared_components
 
 import android.text.InputType
 import android.view.View

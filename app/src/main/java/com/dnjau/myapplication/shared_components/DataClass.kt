@@ -1,4 +1,4 @@
-package com.dnjau.myapplication
+package com.dnjau.myapplication.shared_components
 
 data class DbField(
     val widgets: String,
@@ -12,6 +12,15 @@ data class DbField(
 data class DbFormData(
     val tag: String,
     val text: String,
+)
+
+data class DbCounty(
+    val id: Int,
+    val name: String
+)
+data class DbSubCounty(
+    val id: Int,
+    val name: String
 )
 
 enum class DbWidgets{
